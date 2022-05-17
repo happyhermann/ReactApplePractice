@@ -83,7 +83,7 @@ function App() {
           </div> */}
            {/* */} 
           {
-            modal == true ? <Modal/> : null
+            modal == true ? <Modal 글제목={글제목} color="skyblue"  /> : null
 
           }
 
@@ -102,7 +102,7 @@ function App() {
                     let copy = [...따봉];
                     copy[i] = copy[i] + 1;
                     따봉변경(copy)
- ssss
+  
                     }}>👍  {따봉[i]}</span>
                   <p>2월 17일 발행</p>
                 </div>
@@ -168,8 +168,8 @@ function Modal(props) {
 
   return (
    <>  
-    <div className="modal">
-      <h4>{props.글제목}</h4>
+    <div className="modal" style={{background : props.color}}>
+      <h4>{props.글제목[0]}</h4>
       <p>날짜</p>
       <p>상세내용</p>
     </div>
