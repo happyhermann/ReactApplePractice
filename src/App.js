@@ -102,7 +102,7 @@ function App() {
                     let copy = [...따봉];
                     copy[i] = copy[i] + 1;
                     따봉변경(copy)
- 
+ ssss
                     }}>👍  {따봉[i]}</span>
                   <p>2월 17일 발행</p>
                 </div>
