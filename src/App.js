@@ -8,12 +8,26 @@ function App() {
   let post = '양주 맛집';
   // 자료 잠깐 저장할 땐 변수가 아니라 state 써도 된다.
   let [글제목, 글제목변경] = useState(['남자코트 추천', '강남 우동맛집', 'JS독학']);
-  let [따봉, 따봉변경] = useState(0);
-  // state 변경용 함수, 이거써야 html 재랜더링이 제대로 일어남 
-  // state 변경하는 법 : state변경함수 (새로운state)
+  let [따봉, 따봉변경] = useState([0,0,0]);
+ 
 
  
-     
+
+  let [modal, setModal] = useState(false);
+  // state 변경용 함수, 이거써야 html 재랜더링이 제대로 일어남 
+  // state 변경하는 법 : state변경함수 (새로운state)
+  
+
+  // map() 사용법 : 쉽게 반복문 갖다 쓸 수 있음
+  // [1, 2, 3, 4].map(function(a) {
+  //   return '7761'
+    
+// 1. array 자료 갯수만큼 함수안의 코드 실행해줌
+// 2. 함수의 파라미터는 array안에 있던 자료임
+// 3. return에 뭐 적으면 array로 담아줌
+ 
+  
+  
 
   // state 만드는 
   // 1. import {useState}
@@ -42,13 +56,23 @@ function App() {
           <div className="black-nav">
             <h4>React blog</h4>
           </div>
-          <div className="list">
-            <h4>{글제목[0]} <span style={{cursor : "pointer"}} onClick={ () => { 따봉변경(따봉+1) }}>👍</span> {따봉} </h4>
+          {/* <div className="list">
+            <h4 onClick={() => {
+              if (setModal(false)) {
+                setModal(true)
+              }
+
+              // 2번째 방법
+              // {setModal(!modal)}
+              // 느낌표 우측 자료를 반대로 바꿔줌 
+              // !true 출력하면 false
+              // !false 출력하면 true
+            }}>{글제목[0]} <span style={{cursor : "pointer"}} onClick={ () => { 따봉변경(따봉+1) }}>👍</span> {따봉} </h4>
             {/* onClick={} 안엔 함수이름을 넣어야함*/}
 
             {/* state 변경하는 법 (등호로 변경 금지)
              */}
-            <p>2월 17일 발행</p>a
+            {/* <p>2월 17일 발행</p>a
           </div>
           <div className="list">
             <h4>{글제목[1]}</h4>
@@ -56,10 +80,43 @@ function App() {
           </div> <div className="list">
             <h4>{글제목[2]}</h4>
             <p>2월 17일 발행</p>
-          </div>
-          ss
-          <Modal/>
+          </div> */}
+           {/* */} 
+          {
+            modal == true ? <Modal/> : null
 
+          }
+
+
+          {/* 중괄호안에서는 for문을 쓸 수 없기에 map()으로
+          같은 html 반복 생성해야함 */}
+          
+         {
+           글제목.map(function(a, i) {
+             //map앞에는 실제 블로그 글갯수만큼 생성하기위해 스테이트를 그대로 갖다씀
+              return (
+                <div className="list" key={i}>
+                  <h4 onClick={() => {setModal(true)}}>{글제목[i]}</h4>
+                    <span
+                   onClick={() => {
+                    let copy = [...따봉];
+                    copy[i] = copy[i] + 1;
+                    따봉변경(copy)
+ 
+                    }}>👍  {따봉[i]}</span>
+                  <p>2월 17일 발행</p>
+                </div>
+              )
+           })
+          //  리액트는 array안에 html 담아놔도 잘 보여줌
+         }
+         
+           
+  
+          
+
+
+          
           {/* HTML의 특징은 더럽다, 그럴 땐 컴포넌트를 쓰는 것이 좋음
               캠포넌트 만드는 법 
               1.function 만들기 
@@ -83,69 +140,36 @@ function App() {
 
           {/* 대문자로 시작하면 컴포넌트라고 생각하면 됨, App도 컴포넌트임 */}
 
-
+          <Login/>   
           
-
-
-
           <button onClick={() => {
- 
-                      // array나 object 원본이 아닌 copy본을 만든다음 수정하는 게 좋다
             let copy = [...글제목];
-            // [...]이 있으면 되고 없으면 안된다
-            //[state변경함수 특징] 
-            //기존state == 신규state의 경우 변경안해줌
-            // [...]은 괄호를 벗겨주세요 문법이다. 화살표를 달라주게 만드는 것 (ref)
-            //새로운 state로 인식하게 만드는 것 
-            // shallow copy ```
-            copy[0] = '여자코트 추천';
+            copy[0] = "여자코트 추천"
+            
             글제목변경(copy);
-          }}>글수정</button>
-          
+          }}>글제목 변경</button>
           <button onClick={() => {
             let copy = [...글제목];
-            copy.sort()
+            copy.sort();
             글제목변경(copy)
-            }}>가나다순정렬</button>
-          
-            {/* 문법1 className */}
-            {/* 문법2 변수 넣을땐 {중괄호}
-        상상하는 모든 것에 넣을 수 있음 
-        데이터 바인딩이라고 함
-        서버에서 데이터 가져와서 html사이에
-        넣어주세요~가 프론트엔드가 하는 일 */}
-        {/* 문법3 style 넣을 땐 style={} 
-        style = {{스타일명 : '값'}}*/}  
- 
-    </div>
-    // {/* return()안에는 병렬로 태그 2개이상 기입금지 */}
-  );
+          }}>가나다순정렬</button>
+
+
+   
+    </div> 
+   );
 }
  
-// 컴포넌트를 만들 때는 html 함수 밖에, 대문자로 선언
-
-
-
-// let Modal = () => {
-
-//   return (
-
-
-
-//   )
-
-
-// }
-
-// (참고)
-// 컴포넌트 만드는 문법 2 
  
-function Modal() {
+
+ 
+ 
+function Modal(props) {
 
   return (
    <>  
     <div className="modal">
-      <h4>제목</h4>
+      <h4>{props.글제목}</h4>
       <p>날짜</p>
       <p>상세내용</p>
     </div>
@@ -154,6 +178,32 @@ function Modal() {
   )
 }
 
+
+// 동적인 UI 만드는 Step
+
+// 1. html / css로 미리 디자인완성
+// 2. UI의 현재 상태를 state로 저장
+// 3. state에 따라 UI가 어떻게 보일지 작성
+ 
+
+function Login() {
+  return (
+    <>
+      <form>
+        <input className="id" placeholder="아이디"></input>
+        <input className="password" placeholder="패스워드"></input>
+        <button text="submit">로그인</button>
+      </form>
+
+    </>
+
+
+
+  )
+
+
+}
+ 
 
 
 export default App;
