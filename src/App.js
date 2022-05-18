@@ -1,7 +1,7 @@
 // eslint-disable 
 
  import './App.css';
-import { useState } from 'react';
+import React, { useReducer, useState } from 'react';
 
 function App() {
 
@@ -10,10 +10,16 @@ function App() {
   let [글제목, 글제목변경] = useState(['남자코트 추천', '강남 우동맛집', 'JS독학']);
   let [따봉, 따봉변경] = useState([0,0,0]);
  
-
- 
-
   let [modal, setModal] = useState(false);
+  let [title, setTitle] = useState(0); 
+  
+  let [입력값, 입력값변경] = useState('');
+
+
+
+  // 0이면 0번째 제목, 1이면 1번째 제목, 이름은 상관없음
+// 현재 UI 상태를 state에 저장 (모달창 글 제목 뜨게 하기, 상태는 3가지)
+
   // state 변경용 함수, 이거써야 html 재랜더링이 제대로 일어남 
   // state 변경하는 법 : state변경함수 (새로운state)
   
@@ -81,9 +87,11 @@ function App() {
             <h4>{글제목[2]}</h4>
             <p>2월 17일 발행</p>
           </div> */}
-           {/* */} 
+
+ 
+
           {
-            modal == true ? <Modal 글제목={글제목} 글제목변경={글제목변경} color="skyblue" /> : null
+            modal == true ? <Modal title={title} 타이틀변경={setTitle} 글제목={글제목} 글제목변경={글제목변경} color="skyblue" /> : null
 
           }
 
@@ -96,25 +104,66 @@ function App() {
              //map앞에는 실제 블로그 글갯수만큼 생성하기위해 스테이트를 그대로 갖다씀
               return (
                 <div className="list" key={i}>
-                  <h4 onClick={() => {
-                    setModal(true)}}>{글제목[i]}</h4>
-                    <span
-                   onClick={() => {
-                    let copy = [...따봉];
-                    copy[i] = copy[i] + 1;
-                    따봉변경(copy)
-  
-                    }}>👍  {따봉[i]}</span>
+                  <h4 id="1" onClick={() => { 
+                    setModal(true); setTitle(i)}}>{글제목[i]}                     
+                    <span style={{marginRight:"15px"}}
+                     onClick={(e) => {
+                       e.stopPropagation();
+                      let copy = [...따봉];
+                      copy[i] = copy[i] + 1;
+                      따봉변경(copy)
+    
+                    }}>👍  {따봉[i]}
+                    </span>
+                    <button onClick={(e)=> {
+                      e.stopPropagation()
+                      let copy = [...글제목];
+                      copy.splice(i, 1);
+                      글제목변경(copy)
+                   
+                    }}>삭제</button>
+                    
+
+                     {/* 상위html로 퍼지는 이벤트버블링을 막고싶으면 
+                    e.stopPropagation() 쓰기 */}
+                  </h4>
+               
                   <p>2월 17일 발행</p>
                 </div>
               )
            })
           //  리액트는 array안에 html 담아놔도 잘 보여줌
          }
+   
+ 
+          {/* <input>에 뭔가 입력시 코드실행하고 싶으면 
+         onChange / onInput + 이벤트핸들러 매우 많음 */}
+ 
+        {/* <input onChange={(e)=> {console.log(e.target.value)}}></input> */}
+
+         {/* <input>에 입력한 값 가져오는 법
+          e.target.value : 인풋에 입력한 값 
+         */}
+       
+         <input placeholder="글 입력" style={{padding:"7px", marginRight:"8px"}} onChange={(e) => { 
+           입력값변경(e.target.value) 
+           console.log(입력값)
+        }} />
+          <button onClick={()=> {
+            let copy = [...글제목];
+            copy.unshift(입력값);
+             // array나 오브젝트 수정할땐 카피부터 하는게 좋음 
+            글제목변경(copy)
+
+          }}>글발행</button>
+    
+         {/* <input>에 입력한 값 저장하려면 
          
-           
-  
-          {/* test keychain*/}
+        (정보) state변경함수는 늦게처리됨 
+         */}
+
+
+
 
 
           
@@ -140,9 +189,8 @@ function App() {
           그러므로 너무 더러운 것들만 컴포넌트로 만들기 */}
 
           {/* 대문자로 시작하면 컴포넌트라고 생각하면 됨, App도 컴포넌트임 */}
-
-          <Login/>   
-          
+ 
+{/*           
           <button onClick={() => {
             let copy = [...글제목];
             copy[0] = "여자코트 추천"
@@ -154,10 +202,14 @@ function App() {
             copy.sort();
             글제목변경(copy)
           }}>가나다순정렬</button>
-  
+   */}
 
-   
     </div> 
+
+
+
+
+          
    );
 }
  
@@ -166,14 +218,11 @@ function App() {
  
  
 function Modal(props) {
-  const 글제목 = props.글제목
-  const 글제목변경 = props.글제목변경
-
- 
+  
   return (
    <>  
     <div className="modal" style={{background : props.color}}>
-      <h4></h4>
+      <h4>{props.글제목[props.title]}</h4>
       <p>날짜</p>
       <p>상세내용</p>
      
@@ -190,25 +239,49 @@ function Modal(props) {
 // 2. UI의 현재 상태를 state로 저장
 // 3. state에 따라 UI가 어떻게 보일지 작성
  
+ 
 
-function Login() {
-  return (
-    <>
-      <form>
-        <input className="id" placeholder="아이디"></input>
-        <input className="password" placeholder="패스워드"></input>
-        <button text="submit">로그인</button>
-      </form>
-
-    </>
-
-
-
-  )
-
-
-}
  
 
 
 export default App;
+
+
+
+// 꼭 외워야하는 것 4가지 
+
+// 1. state 만드는 법
+// 2. props 전송하는 법
+// 3. 컴포넌트 만드는 법
+// 4. UI 만드는 step
+
+
+
+
+//예전 리액트 문법 
+
+// class Profile extends React.Component {
+//   constructor() {
+//     super();
+//     this.state = {name : 'Kim', age: 30}
+//     // state는 constructor 안에 작성
+//     // constructor : class 변수/초기값 저장할 때 씀
+//   }
+
+//   changeName() {
+//     this.setState( {name:'Park'})
+//   }
+
+//   render() {
+//     return (
+//       <div>
+//         <h3>프로필입니다</h3>
+//         <p>저는 {this.state.name}입니다</p>
+//         <button onClick={this.changeName.bind(this)}>버튼</button>
+//       </div>
+//     )
+//   }
+// }
+
+  // class : 변수/ 함수 보관 덩어리
+  //extends : 오른쪽에 있는 놈의 성질을 물려받겠습니다
