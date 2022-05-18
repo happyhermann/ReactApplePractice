@@ -83,20 +83,21 @@ function App() {
           </div> */}
            {/* */} 
           {
-            modal == true ? <Modal 글제목={글제목} color="skyblue"  /> : null
+            modal == true ? <Modal 글제목={글제목} 글제목변경={글제목변경} color="skyblue" /> : null
 
           }
 
 
           {/* 중괄호안에서는 for문을 쓸 수 없기에 map()으로
-          같은 html 반복 생성해야함 */}
+          같은 html , ㅠ     ㄹㅇㄴㅇㅁㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹ반복 생성해야함 */}
          
          {
            글제목.map(function(a, i) {
              //map앞에는 실제 블로그 글갯수만큼 생성하기위해 스테이트를 그대로 갖다씀
               return (
                 <div className="list" key={i}>
-                  <h4 onClick={() => {setModal(true)}}>{글제목[i]}</h4>
+                  <h4 onClick={() => {
+                    setModal(true)}}>{글제목[i]}</h4>
                     <span
                    onClick={() => {
                     let copy = [...따봉];
@@ -153,7 +154,7 @@ function App() {
             copy.sort();
             글제목변경(copy)
           }}>가나다순정렬</button>
-
+  
 
    
     </div> 
@@ -165,13 +166,17 @@ function App() {
  
  
 function Modal(props) {
+  const 글제목 = props.글제목
+  const 글제목변경 = props.글제목변경
 
+ 
   return (
    <>  
     <div className="modal" style={{background : props.color}}>
-      <h4>{props.글제목[0]}</h4>
+      <h4></h4>
       <p>날짜</p>
       <p>상세내용</p>
+     
     </div>
    </> 
   //  의미없는 <div> 대신 <></> 사용 가능
